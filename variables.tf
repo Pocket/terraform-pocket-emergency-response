@@ -25,10 +25,10 @@ variable "pagerduty" {
       urgency = string
     })
   }))
-  description = "Defines PagerDuty integration where each key corresponds to an escalation level value."
+  description = "Defines a PagerDuty service associated with an escalation policy. Each key must correspond to a value in `escalation_levels`"
 }
 
-variable "pagerduty_services" {
+variable "pagerduty_integrations" {
   type        = list(object({
     vendor_name      = string
     vendor_id        = string
@@ -39,5 +39,5 @@ variable "pagerduty_services" {
     })
   }))
   default     = [ ]
-  description = "Specify list of services that hook into PagerDuty alerts"
+  description = "Adds integrations from other services to PagerDuty through an SNS subscription"
 }
