@@ -25,7 +25,7 @@ variable "pagerduty" {
       urgency = string
     })
   }))
-  description = "A map where each key corresponds to an escalation level value."
+  description = "Defines PagerDuty integration where each key corresponds to an escalation level value."
 }
 
 variable "pagerduty_services" {
