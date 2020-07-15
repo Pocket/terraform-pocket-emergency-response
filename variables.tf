@@ -33,6 +33,11 @@ variable "pagerduty_services" {
     vendor_name      = string
     vendor_id        = string
     escalation_level = string
+    subscription = object({
+      auto_confirm     = bool
+      confirm_timeout  = number
+    })
   }))
+  default = []
   description = "Specify list of services that hook into PagerDuty alerts"
 }

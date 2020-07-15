@@ -4,7 +4,7 @@ locals {
 
   escalation_levels  = var.escalation_levels
   pagerduty          = var.pagerduty
-  pagerduty_services = var.pagerduty_services != null ? var.pagerduty_services : [ ]
+  services           = var.pagerduty_services != null ? var.pagerduty_services : [ ]
 }
 
 resource "aws_sns_topic" "sns_escalation_levels" {
@@ -27,9 +27,21 @@ resource "pagerduty_service" "pagerduty" {
   }
 }
 
+# generates a pagerduty service that receives an integration key that
+# SNS subscriptions can use to hit PagerDuty
 resource "pagerduty_service_integration" "pagerduty_service" {
-  for_each = local.pagerduty_services
-  name     = each.value[ "vendor_name" ]
-  vendor   = each.value[ "vendor_id" ]
-  service  = pagerduty_service[ each.value[ "escalation_level" ] ][ "id" ]
+  count   = length(local.services)
+  name    = local.services[ count.index ][ "vendor_name" ]
+  vendor  = local.services[ count.index ][ "vendor_id" ]
+  service = pagerduty_service[ local.services[ count.index ][ "escalation_level" ] ][ "id" ]
+}
+
+# connects each pagerduty_service to its SNS escalation level
+resource "aws_sns_topic_subscription" "pagerduty_sns" {
+  count                           = length(local.services)
+  topic_arn                       = aws_sns_topic[ local.services[ count.index ][ "escalation_level" ] ][ "arn" ]
+  protocol                        = "https"
+  endpoint                        = "https://events.pagerduty.com/integration/${pagerduty_service_integration["pagerduty_service"][count.index]["integration_key"]}/enqueue"
+  endpoint_auto_confirms          = local.services[ count.index ]["subscription"][ "auto_confirm" ]
+  confirmation_timeout_in_minutes = local.services[ count.index ]["subscription"][ "confirm_timeout" ]
 }
