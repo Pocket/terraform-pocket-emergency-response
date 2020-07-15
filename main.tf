@@ -2,14 +2,13 @@ locals {
   prefix = var.name_prefix
   tags   = var.tags
 
-  escalation_levels = var.escalation_levels
   services          = var.pagerduty
   integrations      = var.pagerduty_integrations != null ? var.pagerduty_integrations : [ ]
 }
 
 resource "aws_sns_topic" "topics" {
-  for_each = toset(local.escalation_levels)
-  name     = "${local.prefix}-SNS-${title(each.value)}"
+  for_each = local.services
+  name     = "${local.prefix}-SNS-${title(each.key)}"
   tags     = local.tags
 }
 
