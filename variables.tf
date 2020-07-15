@@ -9,11 +9,6 @@ variable "tags" {
   default     = {}
 }
 
-variable "escalation_levels" {
-  type        = list(string)
-  description = "Define your escalation levels, e.g.: [critical, urgent, non-critical]"
-}
-
 variable "pagerduty" {
   type        = map(object({
     escalation_policy       = string
