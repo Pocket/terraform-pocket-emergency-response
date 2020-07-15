@@ -16,6 +16,7 @@ These are specified as map with each key being an escalation level:
 
 ```hcl-terraform
 module "emergency" {
+    source = "." 
 	pagerduty = {
 		critical = {
 			escalation_policy = "..."
