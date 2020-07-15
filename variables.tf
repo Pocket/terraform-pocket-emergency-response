@@ -17,7 +17,7 @@ variable "escalation_levels" {
 variable "pagerduty" {
   type        = map(object({
     escalation_policy       = string
-    auto_resolve_timout     = number
+    auto_resolve_timeout    = number
     acknowledgement_timeout = number
     alert_action            = string
     rule                    = object({
@@ -33,11 +33,11 @@ variable "pagerduty_services" {
     vendor_name      = string
     vendor_id        = string
     escalation_level = string
-    subscription = object({
-      auto_confirm     = bool
-      confirm_timeout  = number
+    subscription     = object({
+      auto_confirm    = bool
+      confirm_timeout = number
     })
   }))
-  default = []
+  default     = [ ]
   description = "Specify list of services that hook into PagerDuty alerts"
 }
