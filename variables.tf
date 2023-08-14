@@ -10,12 +10,12 @@ variable "tags" {
 }
 
 variable "pagerduty" {
-  type        = map(object({
+  type = map(object({
     escalation_policy       = string
     auto_resolve_timeout    = number
     acknowledgement_timeout = number
     alert_action            = string
-    rule                    = object({
+    rule = object({
       type    = string
       urgency = string
     })
@@ -24,15 +24,15 @@ variable "pagerduty" {
 }
 
 variable "pagerduty_integrations" {
-  type        = list(object({
+  type = list(object({
     vendor_name      = string
     vendor_id        = string
     escalation_level = string
-    subscription     = object({
+    subscription = object({
       auto_confirm    = bool
       confirm_timeout = number
     })
   }))
-  default     = [ ]
+  default     = []
   description = "Adds integrations from other services to PagerDuty through an SNS subscription"
 }
